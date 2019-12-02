@@ -1,5 +1,13 @@
 from flask import Flask
 from flask import Flask, render_template
+from pymongo import MongoClient
+
+cline = MongoClient()
+db = clinet.Playlister
+playlists = db.playlists
+
+
+
 app = Flask(__name__)
 
 
@@ -14,15 +22,23 @@ def index():
 app = Flask(__name__)
 
 
-playlists = [
-    { 'title': 'Cat Videos', 'description': 'Cats acting weird' },
-    { 'title': '80\'s Music', 'description': 'Don\'t stop believing!' }
-]
+# playlists = [
+#     { 'title': 'Cat Videos', 'description': 'Cats acting weird' },
+#     { 'title': '80\'s Music', 'description': 'Don\'t stop believing!' }
+# ]
+
+# playlists = [
+#   { 'title': 'Great Playlist' },
+#   { 'title': 'Next Playlist' }
+# ]
+
+
 
 @app.route('/')
 def playlists_index():
     """Show all playlists."""
-    return render_template('playlists_index.html', playlists=playlists)
+    # Update this line
+    return render_template('playlists_index.html', playlists=playlists.find())
 
 
 
