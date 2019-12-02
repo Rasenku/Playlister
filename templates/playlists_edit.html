@@ -1,0 +1,28 @@
+<!-- templates/playlists_new.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<form method='POST' action='/playlists/{{playlist._id}}'>
+    <fieldset>
+    <legend>Edit Playlist</legend>
+    <!-- TITLE -->
+    <p>
+        <label for='title'>Title</label><br>
+        <input type='text' name='title' />
+    </p>
+    <p>
+        <label for='description'>Description</label><br>
+        <input type='text' name='description' />
+    </p>
+    <p>
+      <label for='video_id'>Video</label><br>
+      <input type='url' name='video' value= '{{videos}}'/>
+      </p>
+    </fieldset>
+
+    <!-- BUTTON -->
+    <div class='form-group'>
+                <button class='btn btn-primary' type='submit'>Save Playlist</button>
+            </div>
+</form>
+{% endblock %}
