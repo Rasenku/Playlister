@@ -3,22 +3,14 @@ from flask import Flask, render_template
 from pymongo import MongoClient
 from flask import Flask, render_template, request, redirect, url_for
 from bson.objectid import ObjectId
-
+import os
 
 app = Flask(__name__)
-# Add the following import
-import os
-...
-# update the client, db, and playlists assignments to the following,
-# including the new host variable
-host = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/Playlister')
-client = MongoClient(host=host)
-db = client.get_default_database()
-playlists = db.playlists
 
-db = client.get_default_database()
+host = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/Playlister')
+client = MongoClient()
+db = client.Playlister
 playlists = db.playlists
-# Add this line:
 comments = db.comments
 
 
@@ -129,12 +121,20 @@ def playlists_show(playlist_id):
     return render_template('playlists_show.html', playlist=playlist, comments=playlist_comments)
 
 
-@@app.route('/playlists/comments', methods=['POST'])
+@app.route('/playlists/comments', methods=['POST'])
 def comments_new():
     """Submit a new comment."""
     # TODO: Fill in the code here to build the comment object,
     # and then insert it into the MongoDB comments collection
     return redirect(url_for('playlists_show', playlist_id=request.form.get('playlist_id')))
+
+
+@app.route('/playlists/<playlist_id>/delete', methods=['POST'])
+def playlists_delete(playlist_id):
+    """Delete one playlist."""
+    playlists.delete_one({'_id': ObjectId(playlist_id)})
+    return redirect(url_for('playlists_index'))
+
 
 
 if __name__ == '__main__':
