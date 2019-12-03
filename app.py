@@ -16,6 +16,11 @@ client = MongoClient(host=host)
 db = client.get_default_database()
 playlists = db.playlists
 
+db = client.get_default_database()
+playlists = db.playlists
+# Add this line:
+comments = db.comments
+
 
 # Note the methods parameter that explicitly tells the route that this is a POST
 @app.route('/playlists', methods=['POST'])
@@ -114,12 +119,22 @@ def playlists_edit(playlist_id):
     return render_template('playlists_edit.html', playlist=playlist, title='Edit Playlist')
 
 
-@app.route('/playlists/<playlist_id>/delete', methods=['POST'])
-def playlists_delete(playlist_id):
-    """Delete one playlist."""
-    playlists.delete_one({'_id': ObjectId(playlist_id)})
-    return redirect(url_for('playlists_index'))
+@app.route('/playlists/<playlist_id>')
+def playlists_show(playlist_id):
+    """Show a single playlist."""
+    playlist = playlists.find_one({'_id': ObjectId(playlist_id)})
+    # Add the below line:
+    playlist_comments = comments.find({'playlist_id': ObjectId(playlist_id)})
+    # Edit the return statement to be the following:
+    return render_template('playlists_show.html', playlist=playlist, comments=playlist_comments)
 
+
+@@app.route('/playlists/comments', methods=['POST'])
+def comments_new():
+    """Submit a new comment."""
+    # TODO: Fill in the code here to build the comment object,
+    # and then insert it into the MongoDB comments collection
+    return redirect(url_for('playlists_show', playlist_id=request.form.get('playlist_id')))
 
 
 if __name__ == '__main__':
