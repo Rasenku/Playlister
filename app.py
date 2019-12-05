@@ -136,6 +136,14 @@ def playlists_delete(playlist_id):
     return redirect(url_for('playlists_index'))
 
 
+def video_url_creator(id_lst):
+    videos = []
+    for vid_id in id_lst:
+        # We know that embedded YouTube videos always have this format
+        video = 'https://youtube.com/embed/' + vid_id
+        videos.append(video)
+    return videos
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=os.environ.get('PORT', 5000))
